@@ -1,0 +1,66 @@
+{% load googlecharts %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type='text/javascript'>
+            google.charts.load('current', {'packages':['corechart']});
+            google.charts.setOnLoadCallback(drawChart);
+            function drawChart() {
+                var ddata = google.visualization.arrayToDataTable([
+                ['DateTime', 'Temperature', 'Humidity', 'Illumination', 'Movement', 'Noise', 'CO2'],
+                {% for d in data %}
+                    ['{{d.time}}', {{d.d1}}, {{d.d2}}, {{d.d3}}, {{d.d4}}, {{d.d5}}, {{d.d6}}],
+                {% endfor %}
+                ]);
+
+                var options = {
+                title: 'Box Data',
+                curveType: 'function',
+                legend: { position: 'bottom' }
+                };
+
+                var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+                chart.draw(ddata, options);
+            }
+        </script>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="static/base.css">
+        <title>Boxes data</title>
+    </head>
+    <body>
+        {% if data %}
+        <table>
+            <tr>
+                <td><strong>Дата и время</strong></td>
+                <td><strong>Номер коробки</strong></td>
+                <td><strong>Температура, °C</strong></td>
+                <td><strong>Влажность, %</strong></td>
+                <td><strong>Освещенность, %</strong></td>
+                <td><strong>Движение, %</strong></td>
+                <td><strong>Шум, %</strong></td>
+                <td><strong>Газ, %</strong></td>
+            </tr>  
+            {% for d in data %}
+                <tr> <td>{{d.time}}</td>
+                    <td>{{d.box_number}}</td>
+                    <td>{{d.d1}}</td>
+                    <td>{{d.d2}}</td>
+                    <td>{{d.d3}}</td>
+                    <td>{{d.d4}}</td>
+                    <td>{{d.d5}}</td>
+                    <td>{{d.d6}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+            Пока данных нет
+        {% endif %}
+        
+        <br>
+        <div id="curve_chart" style="width: 1200px; height: 500px"></div>
+
+    </body>
+</html>
