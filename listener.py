@@ -13,13 +13,16 @@ def on_message(client, userdata, msg):
     data = msg.payload.decode('UTF-8')
     print(data)
     if data != 'Sending from Unity3D!!!':
-        data = data.split()
-        data[1] = data[0]+' '+data[1]
-        data[0] = len(db.output_data())
-        data = tuple(data)
-        print(data)
-        db.append_data(data)
-        print(db.output_data())
+        try:
+            data = data.split()
+            data[1] = data[0]+' '+data[1]
+            data[0] = len(db.output_data())
+            data = tuple(data)
+            print(data)
+            db.append_data(data)
+            print(db.output_data())
+        except:
+            print('Неправильный формат данных')
 
 
 subscriber = mqtt.Client()
