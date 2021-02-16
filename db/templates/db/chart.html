@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Refresh" content="10"/>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type='text/javascript'>
+            google.charts.load('current', {'packages':['corechart']});
+            google.charts.setOnLoadCallback(drawChart);
+            function drawChart() {
+                var ddata = google.visualization.arrayToDataTable([
+                ['Дата', 'Влажность', 'Освещенность', 'Шум', 'CO2'],
+                {% for d in data %}
+                    ['{{d.time}}', {{d.d2}}, {{d.d3}}, {{d.d5}}, {{d.d6}}],
+                {% endfor %}
+                ]);
+
+                var options = {
+                title: 'Данные',
+                curveType: 'function',
+                legend: { position: 'bottom' }
+                };
+
+                var data_chart = new google.visualization.LineChart(document.getElementById('curve_chart'));                
+
+                data_chart.draw(ddata, options);
+            }
+
+            google.charts.setOnLoadCallback(drawTemperatureChart);
+            function drawTemperatureChart() {
+                var tdata = google.visualization.arrayToDataTable([
+                ['DateTime', 'Температура'],
+                {% for d in data %}
+                    ['{{d.time}}', {{d.d1}}],
+                {% endfor %}
+                ]);
+
+                var options = {
+                title: 'Температура',
+                curveType: 'function',
+                legend: { position: 'bottom' }
+                };
+
+                var temperature_chart = new google.visualization.LineChart(document.getElementById('temperature'));               
+
+                temperature_chart.draw(tdata, options);
+            }
+
+            google.charts.setOnLoadCallback(drawMovementChart);
+            function drawMovementChart() {
+                var mdata = google.visualization.arrayToDataTable([
+                ['DateTime', 'Движение'],
+                {% for d in data %}
+                    ['{{d.time}}', {{d.d4}}],
+                {% endfor %}
+                ]);
+
+                var options = {
+                title: 'Движение',
+                curveType: 'function',
+                legend: { position: 'bottom' }
+                };
+
+                var movement_chart = new google.visualization.LineChart(document.getElementById('Movement'));               
+
+                movement_chart.draw(mdata, options);
+            }
+        </script>
+        <meta charset="UTF-8">
+        <title>Boxes data</title>
+    </head>
+    <body>
+        <a href="/">Данные</a> 
+        <div id="curve_chart" style="width: 1000px; height: 500px"></div>
+        <div id="temperature" style="width: 1000px; height: 500px"></div>
+        <div id="Movement" style="width: 1000px; height: 500px"></div>
+    </body>
+</html>

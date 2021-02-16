@@ -9,19 +9,20 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_message(client, userdata, msg):
-    print(msg.payload)
     data = msg.payload.decode('UTF-8')
-    print(data)
+    topic = msg.topic[msg.topic.find('/')+1:]
     if data != 'Sending from Unity3D!!!':
         try:
             data = data.split()
             data[1] = data[0]+' '+data[1]
             data[0] = len(db.output_data())
+            data = data[:2] + [topic] + data[2:]
+            data[7] = str(int(bool(float(data[7]))))
             data = tuple(data)
             print(data)
             db.append_data(data)
-            print(db.output_data())
-        except:
+        except Exception as e:
+            print(repr(e))
             print('Неправильный формат данных')
 
 

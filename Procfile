@@ -1,1 +1,0 @@
-web: gunicorn box_site.wsgi --log-file -
